@@ -14,20 +14,21 @@ import javafx.stage.Stage
  */
 
 class Program : Application() {
+    companion object {
+        var user: User = User()
+        val database: Database = Database()
+    }
+
     val login = Login()
     val register = Register()
-    val weeklyScheduleTab = WeeklySchedule().tab
-    val database = Database()
     val mainPane = Pane()
     var tabPane: TabPane = TabPane()
 
     override fun start(primaryStage: Stage) {
-        tabPane.tabs.add(weeklyScheduleTab)
         setMainPane()
 
-        val loginPane = login.loginPane
         primaryStage.apply {
-            scene = Scene(loginPane, 450.0, 250.0)
+            scene = Scene(login.loginPane, 450.0, 250.0)
             title = "VaqPack Organizer"
             show()
         }
@@ -39,6 +40,11 @@ class Program : Application() {
 
         login.registerBn.setOnAction {
             primaryStage.scene = Scene(register.registerPane, 450.0, 300.0)
+            primaryStage.centerOnScreen()
+        }
+
+        register.registerBn.setOnAction {
+            primaryStage.scene = register.register(database, mainPane, primaryStage.scene)
             primaryStage.centerOnScreen()
         }
     }
